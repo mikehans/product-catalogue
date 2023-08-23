@@ -1,11 +1,25 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e759bf55_002Da493_002D49fc_002D8c80_002D6c8821334802/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from CategoryTests.cs" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5b76dc78_002D1738_002D4db2_002Db267_002D4272f8e917d1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Or&gt;&#xD;
     &lt;ProjectFile&gt;FA638DC2-375E-449B-84F0-F751ED9DA4EC/f:CategoryTests.cs&lt;/ProjectFile&gt;&#xD;
     &lt;TestAncestor&gt;&#xD;
       &lt;TestId&gt;NUnit3x::FA638DC2-375E-449B-84F0-F751ED9DA4EC::net6.0::Categories.Tests.MultiHierarchyTests.AddTwoHierarchies_ShouldReturnTwoSeparateHierarchies&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;NUnit3x::FA638DC2-375E-449B-84F0-F751ED9DA4EC::net6.0::Categories.Tests.ForestTests.CreateForest_ShouldReturnForestWithTwoTrees&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;NUnit3x::FA638DC2-375E-449B-84F0-F751ED9DA4EC::net6.0::Categories.Tests.ForestTests.CreateTree_ShouldReturnGivenValidInput&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::53DAC569-BC91-4BC2-85A6-A5F8A6FDDAD2::net7.0::Categories.CosmosDb.Tests.CosmosStorageTests.ReadAll_ShouldReturnTreeWith3Items&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::53DAC569-BC91-4BC2-85A6-A5F8A6FDDAD2::net7.0::Categories.CosmosDb.Tests.CosmosStorageTests.ReadAll_ShouldReturn2TreesWith3ItemsEach&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+  &lt;/Or&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e759bf55_002Da493_002D49fc_002D8c80_002D6c8821334802/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from CategoryTests.cs" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;ProjectFile&gt;FA638DC2-375E-449B-84F0-F751ED9DA4EC/f:CategoryTests.cs&lt;/ProjectFile&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::FA638DC2-375E-449B-84F0-F751ED9DA4EC::net6.0::Categories.Tests.MultiHierarchyTests.AddTwoHierarchies_ShouldReturnTwoSeparateHierarchies&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::FA638DC2-375E-449B-84F0-F751ED9DA4EC::net6.0::Categories.Tests.ForestTests.CreateForest_ShouldReturnForestWithTwoTrees&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::FA638DC2-375E-449B-84F0-F751ED9DA4EC::net6.0::Categories.Tests.ForestTests.CreateTree_ShouldReturnGivenValidInput&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::53DAC569-BC91-4BC2-85A6-A5F8A6FDDAD2::net7.0::Categories.CosmosDb.Tests.CosmosStorageTests.ReadAll_ShouldReturnTreeWith3Items&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::53DAC569-BC91-4BC2-85A6-A5F8A6FDDAD2::net7.0::Categories.CosmosDb.Tests.CosmosStorageTests.ReadAll_ShouldReturn2TreesWith3ItemsEach&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

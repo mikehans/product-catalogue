@@ -1,17 +1,19 @@
-﻿namespace Categories.CosmosDb;
+﻿using System.Text.Json.Serialization;
 
-internal class CategoryDTO
+namespace Categories.CosmosDb;
+
+public class CategoryDTO
 {
-    internal string Id { get; set; }
-    internal string PartitionKey { get; set; }
-    internal string Name { get; set; }
-    internal bool? IsRoot { get; set; }
-    internal NestedCategoryDTO? Parent { get; set; }
-    internal ICollection<NestedCategoryDTO>? Ancestors { get; set; }
+    public string id { get; set; }
+    public string RootId { get; set; }
+    public string Name { get; set; }
+    public bool? IsRoot { get; set; }
+    public NestedCategoryDTO? Parent { get; set; }
+    public ICollection<NestedCategoryDTO>? Ancestors { get; set; }
 }
 
-internal class NestedCategoryDTO
+public class NestedCategoryDTO
 {
-    internal string Id { get; set; }
-    internal string Name { get; set; }
+    public string id { get; set; }
+    public string Name { get; set; }
 }

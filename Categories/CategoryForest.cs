@@ -19,7 +19,7 @@ namespace Categories;
 /// Stores the forest in a Dictionary (of string, CategoryTree).
 /// The key is the name used by the root element.
 /// </summary>
-public class CategoryForest
+public class CategoryForest : ICategoryForest
 {
     private readonly Dictionary<string, CategoryTree> _forest = new();
 

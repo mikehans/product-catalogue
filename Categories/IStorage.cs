@@ -2,6 +2,6 @@
 
 public interface IStorage
 {
-    public bool Store(CategoryForest forest);
+    public Task<bool> Store(CategoryForest forest);
     public Task<CategoryForest> ReadAll();
 }

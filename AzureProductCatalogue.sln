@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Categories.Tests", "Categor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Categories.CosmosDb", "Categories.CosmosDb\Categories.CosmosDb.csproj", "{F92DB83A-3992-4F63-A377-2430456B750A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Categories.CosmosDb.Tests", "Categories.CosmosDb.Tests\Categories.CosmosDb.Tests.csproj", "{53DAC569-BC91-4BC2-85A6-A5F8A6FDDAD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,7 @@ Global
 		{CE101FBE-23B7-49C5-82DE-2C3B4F9DB0C2} = {40A608B0-102E-4266-8952-CF4C45F0D9DD}
 		{FA638DC2-375E-449B-84F0-F751ED9DA4EC} = {41AFC237-B6B0-45CF-82DC-D086BE32D358}
 		{F92DB83A-3992-4F63-A377-2430456B750A} = {40A608B0-102E-4266-8952-CF4C45F0D9DD}
+		{53DAC569-BC91-4BC2-85A6-A5F8A6FDDAD2} = {41AFC237-B6B0-45CF-82DC-D086BE32D358}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE101FBE-23B7-49C5-82DE-2C3B4F9DB0C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -38,5 +41,9 @@ Global
 		{F92DB83A-3992-4F63-A377-2430456B750A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F92DB83A-3992-4F63-A377-2430456B750A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F92DB83A-3992-4F63-A377-2430456B750A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53DAC569-BC91-4BC2-85A6-A5F8A6FDDAD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53DAC569-BC91-4BC2-85A6-A5F8A6FDDAD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53DAC569-BC91-4BC2-85A6-A5F8A6FDDAD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53DAC569-BC91-4BC2-85A6-A5F8A6FDDAD2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

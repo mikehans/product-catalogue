@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Categories.Tests")]
+[assembly: InternalsVisibleTo("Categories.CosmosDb.Tests")]
 
 namespace Categories;
 

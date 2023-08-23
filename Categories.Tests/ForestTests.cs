@@ -53,6 +53,8 @@ public class ForestTests
             Parent = root2
         };
         list2.Add(t1);
+        
+        Assert.Fail("Empty test");
     }
 
     [Test]
@@ -88,4 +90,5 @@ public class ForestTests
         sut.AddTree(newTree);
         Assert.That(sut.Get(), Does.ContainKey("Men's"));
     }
+    
 }
