@@ -76,18 +76,19 @@ public class CosmosStorageTests
         var sut = new CosmosStorage(testClient, testConfigRoot);
         await sut.Store(forest); // I don't yet get anything useful back out of this.
         
-        using FeedIterator<CategoryDTO> feed = container.GetItemQueryIterator<CategoryDTO>(
-            queryText: "SELECT * FROM categories");
-
-        int resultCount = 0;
-        while (feed.HasMoreResults)
-        {
-            var readResult= await feed.ReadNextAsync();
-            TestContext.WriteLine(readResult.Count);
-            resultCount += readResult.Count;
-        }
-        
-        Assert.That(resultCount, Is.EqualTo(6));
+        // This part gets the items directly from the database. Superseded by forest.GetForestCount()
+        // using FeedIterator<CategoryDTO> feed = container.GetItemQueryIterator<CategoryDTO>(
+        //     queryText: "SELECT * FROM categories");
+        //
+        // int resultCount = 0;
+        // while (feed.HasMoreResults)
+        // {
+        //     var readResult= await feed.ReadNextAsync();
+        //     TestContext.WriteLine(readResult.Count);
+        //     resultCount += readResult.Count;
+        // }
+        //
+        // Assert.That(resultCount, Is.EqualTo(6));
 
         var readForest = await sut.ReadAll();
         var forestItems = readForest.Get();
