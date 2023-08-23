@@ -70,6 +70,19 @@ public class CategoryForest : ICategoryForest
         return tree[key];
     }
 
+    public int GetForestCount()
+    {
+        int count = 0;
+        
+        foreach (var keyValuePair in _forest)
+        {
+            var tree = keyValuePair.Value.Get();
+            count += tree.Count;
+        }
+
+        return count;
+    }
+
     #endregion
 
     #region Commands

@@ -90,9 +90,11 @@ public class CosmosStorageTests
         Assert.That(resultCount, Is.EqualTo(6));
 
         var readForest = await sut.ReadAll();
-        // var forestItems = readForest.Get();
-        // Assert.That(forestItems, Does.ContainKey("Root One"));
-        // Assert.That(forestItems, Does.ContainKey("Root Two"));
-
+        var forestItems = readForest.Get();
+        
+        Assert.That(forest.GetForestCount(), Is.EqualTo(6), "Count does not equal 6");
+        Assert.That(forestItems.Keys.Count, Is.EqualTo(2), "Expected 2 trees");
+        Assert.That(forestItems, Does.ContainKey("Root One"));
+        Assert.That(forestItems, Does.ContainKey("Root Two"));
     }
 }

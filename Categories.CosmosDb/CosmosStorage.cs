@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Nodes;
-using Microsoft.Azure.Cosmos;
+﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 
 namespace Categories.CosmosDb;
@@ -60,12 +58,21 @@ public class CosmosStorage : IStorage
             }
         }
 
+        // TODO: Add a relevant return
         return true;
 
+        // TODO: not yet in scope: deletes.
+    }
 
-        //  upsert each node (irrespective of whether it is root or not)
+    public async Task<CategoryForest> ReadAll()
+    {
+        var container = GetContainer("categories");
 
-        // not yet in scope: deletes.
+        var allCategories = await GetAllCategories(container);
+
+        var forest = CreateForest(allCategories);
+
+        return forest;
     }
 
     private static List<NestedCategoryDTO> BuildAncestorList(CategoryFull categoryFull)
@@ -80,17 +87,6 @@ public class CosmosStorage : IStorage
         }
 
         return nestedCategoryDtos;
-    }
-
-    public async Task<CategoryForest> ReadAll()
-    {
-        var container = GetContainer("categories");
-
-        var allCategories = await GetAllCategories(container);
-
-        var forest = CreateForest(allCategories);
-
-        return forest;
     }
 
     private static CategoryForest CreateForest(List<CategoryDTO> allCategories)
