@@ -7,7 +7,7 @@ public class ForestTests
 {
     [Test]
     [Description("The basic happy path test for two trees")]
-    public void CreateForest_ShouldReturnForestWithTwoTrees_GivenValidInput()
+    public void CreateForest_ShouldReturnForestWithTwoTrees()
     {
         #region TestData
 
@@ -70,7 +70,7 @@ public class ForestTests
 
     [Test]
     [Description("The basic happy path test")]
-    public void CreateTree_ShouldReturnForestWithOneTree_GivenValidInput()
+    public void CreateTree_ShouldReturnForestWithOneTree()
     {
         #region TestData
 

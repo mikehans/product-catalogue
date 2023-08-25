@@ -104,7 +104,7 @@ public class CosmosStorageTests
     }
 
     [Test]
-    public async Task Store_ShouldAdd5NodesThenDeleteLeafNode()
+    public async Task Store_ShouldDeleteLeafNode()
     {
         #region TestData
 
@@ -163,7 +163,7 @@ public class CosmosStorageTests
     }
 
     [Test]
-    public async Task Store_ShouldAdd5NodesThenRejectDeleteOfBranchNode()
+    public async Task Store_ShouldRejectDeleteOfBranchNode()
     {
         #region TestData
 
