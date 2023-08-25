@@ -13,6 +13,7 @@
       &lt;TestId&gt;NUnit3x::FA638DC2-375E-449B-84F0-F751ED9DA4EC::net6.0::Categories.Tests.ForestTests.CreateTree_ShouldReturnForestWithOneTree_GivenValidInput&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;NUnit3x::FA638DC2-375E-449B-84F0-F751ED9DA4EC::net6.0::Categories.Tests.ForestTests.CreateForest_ShouldReturnForestWithTwoTrees_GivenValidInput&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;NUnit3x::FA638DC2-375E-449B-84F0-F751ED9DA4EC::net6.0::Categories.Tests.ForestTests.TryDeleteNodeFromTree_ShouldDeleteLeafNode&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::FA638DC2-375E-449B-84F0-F751ED9DA4EC::net6.0::Categories.Tests.ForestTests.TryDeleteNodeFromTree_ShouldFailToDeleteBranchNode&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>

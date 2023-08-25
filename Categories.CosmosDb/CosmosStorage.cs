@@ -35,7 +35,7 @@ public class CosmosStorage : IStorage
         await Task.WhenAll(tasks);
     }
 
-    private List<Task> CreateCosmosChangeTasks(Dictionary<string, CategoryFull> treeDict, Container container,
+    private List<Task> CreateCosmosChangeTasks(Dictionary<string, Category> treeDict, Container container,
         string partitionKey)
     {
         List<Task> tasks = new List<Task>();
@@ -84,24 +84,24 @@ public class CosmosStorage : IStorage
         }
     }
 
-    private CategoryDTO CreateCategoryDto(CategoryFull categoryFull, string partitionKey)
+    private CategoryDTO CreateCategoryDto(Category category, string partitionKey)
     {
         var categoryDto = new CategoryDTO()
         {
-            id = categoryFull.Id,
-            Name = categoryFull.Name,
+            id = category.Id,
+            Name = category.Name,
             RootId = partitionKey
         };
 
-        if (categoryFull.IsRoot is true)
+        if (category.IsRoot is true)
         {
             categoryDto.IsRoot = true;
         }
         else
         {
             categoryDto.Parent = new NestedCategoryDTO()
-                { id = categoryFull?.Parent?.Id, Name = categoryFull?.Parent?.Name };
-            categoryDto.Ancestors = BuildAncestorList(categoryFull);
+                { id = category?.Parent?.Id, Name = category?.Parent?.Name };
+            categoryDto.Ancestors = BuildAncestorList(category);
         }
 
         return categoryDto;
@@ -118,12 +118,12 @@ public class CosmosStorage : IStorage
         return forest;
     }
 
-    private static List<NestedCategoryDTO> BuildAncestorList(CategoryFull categoryFull)
+    private static List<NestedCategoryDTO> BuildAncestorList(Category category)
     {
         var nestedCategoryDtos = new List<NestedCategoryDTO>();
-        if (categoryFull.Ancestors is not null)
+        if (category.Ancestors is not null)
         {
-            foreach (var ancestor in categoryFull.Ancestors)
+            foreach (var ancestor in category.Ancestors)
             {
                 nestedCategoryDtos.Add(new NestedCategoryDTO() { id = ancestor.Id, Name = ancestor.Name });
             }

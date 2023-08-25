@@ -19,13 +19,13 @@ namespace Categories;
  */
 /// <summary>
 /// Represents a single category hierarchy.
-/// Internally, maintains a Dictonary (of string, CategoryFull).
+/// Internally, maintains a Dictonary (of string, Category).
 /// The key of each node is the ID.
 /// This is intended to be accessed only through the Aggregate Root (a CategoryForest).
 /// </summary>
 public class CategoryTree
 {
-    private readonly Dictionary<string, CategoryFull> _hierarchy;
+    private readonly Dictionary<string, Category> _hierarchy;
 
     /// <summary>
     /// Constructor. Initialises the internal dictionary with a root node.
@@ -33,20 +33,20 @@ public class CategoryTree
     /// <param name="rootCategory"></param>
     internal CategoryTree(CategoryBasic rootCategory)
     {
-        var category = new CategoryFull
+        var category = new Category
         {
             Id = rootCategory.Id,
             Name = rootCategory.Name,
             IsRoot = true
         };
-        _hierarchy = new Dictionary<string, CategoryFull> { { rootCategory.Id, category } };
+        _hierarchy = new Dictionary<string, Category> { { rootCategory.Id, category } };
     }
 
     /// <summary>
     /// Returns the internal dictionary.
     /// </summary>
     /// <returns></returns>
-    public Dictionary<string, CategoryFull> Get()
+    public Dictionary<string, Category> Get()
     {
         return _hierarchy;
     }
@@ -55,7 +55,7 @@ public class CategoryTree
     /// Returns the root node of the tree.
     /// </summary>
     /// <returns>The complete root node</returns>
-    internal CategoryFull GetRoot()
+    internal Category GetRoot()
     {
         var values = _hierarchy.Select(kvp => kvp.Value);
         var rootCategory = values.First(v => v.IsRoot == true);
@@ -63,7 +63,7 @@ public class CategoryTree
         return rootCategory;
     }
 
-    internal bool TryFindNodeById(string id, out CategoryFull? foundNode)
+    internal bool TryFindNodeById(string id, out Category? foundNode)
     {
         var isSuccessful =  _hierarchy.TryGetValue(id, out foundNode);
         return isSuccessful;
@@ -99,7 +99,7 @@ public class CategoryTree
     /// <returns></returns>
     internal string InsertChild(Category childCategory, Category parent)
     {
-        var resultCategory = new CategoryFull
+        var resultCategory = new Category
         {
             Id = childCategory.Id,
             Name = childCategory.Name,

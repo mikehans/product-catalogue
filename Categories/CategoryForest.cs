@@ -67,7 +67,7 @@ public class CategoryForest : ICategoryForest
     /// <param name="key">The key of the item</param>
     /// <param name="treeId">The key of the parent tree</param>
     /// <returns>The full category</returns>
-    public CategoryFull GetCategoryByKey(string key, string treeId)
+    public Category GetCategoryByKey(string key, string treeId)
     {
         var tree = _forest[treeId].Get();
         return tree[key];
@@ -95,7 +95,7 @@ public class CategoryForest : ICategoryForest
         var treeExistsInForest = _forest.TryGetValue(treeId, out CategoryTree? targetTree);
         if (treeExistsInForest)
         {
-            var nodeExists = targetTree.TryFindNodeById(nodeId, out CategoryFull? foundNode);
+            var nodeExists = targetTree.TryFindNodeById(nodeId, out Category? foundNode);
             if (nodeExists)
             {
                 // check if node has children
