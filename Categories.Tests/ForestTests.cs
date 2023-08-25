@@ -9,7 +9,8 @@ public class ForestTests
     [Description("The basic happy path test for two trees")]
     public void CreateForest_ShouldReturnForestWithTwoTrees_GivenValidInput()
     {
-        #region TestData    
+        #region TestData
+
         var list1 = new List<Category>();
         var root1 = new Category
         {
@@ -57,12 +58,12 @@ public class ForestTests
         list2.Add(t1);
 
         #endregion
-        
+
         var sut = new CategoryForest();
         sut.AddTree(list1);
         sut.AddTree(list2);
 
-        Assert.That(sut.Get().Count(),Is.EqualTo(2), "Expected 2 trees in forest");
+        Assert.That(sut.Get().Count(), Is.EqualTo(2), "Expected 2 trees in forest");
         Assert.That(sut.Get(), Does.ContainKey("Root 1"));
         Assert.That(sut.Get(), Does.ContainKey("Root 2"));
     }
@@ -72,6 +73,7 @@ public class ForestTests
     public void CreateTree_ShouldReturnForestWithOneTree_GivenValidInput()
     {
         #region TestData
+
         // Note that this tree must have its nodes inserted in order, so that the parent exists before the children
         var newTree = new List<Category>();
 
@@ -97,6 +99,7 @@ public class ForestTests
             Name = "T-shirts",
             Parent = cat1
         });
+
         #endregion
 
         var sut = new CategoryForest();
@@ -104,11 +107,12 @@ public class ForestTests
         Assert.That(sut.Get().Count, Is.EqualTo(1), "Expected one tree in the forest.");
         Assert.That(sut.Get(), Does.ContainKey("Men's"));
     }
-    
+
     [Test]
     public void TryDeleteNodeFromTree_ShouldDeleteLeafNode()
     {
         #region TestData
+
         // Note that this tree must have its nodes inserted in order, so that the parent exists before the children
         var newTree = new List<Category>();
 
@@ -134,6 +138,7 @@ public class ForestTests
             Name = "T-shirts",
             Parent = cat1
         });
+
         #endregion
 
         var sut = new CategoryForest();
@@ -146,11 +151,12 @@ public class ForestTests
         Assert.That(hasDeletedNode, Is.True, "Failed to delete the leaf node");
         Assert.That(reason, Is.EqualTo("Node successfully marked for deletion."));
     }
-    
+
     [Test]
     public void TryDeleteNodeFromTree_ShouldFailToDeleteBranchNode()
     {
         #region TestData
+
         // Note that this tree must have its nodes inserted in order, so that the parent exists before the children
         var newTree = new List<Category>();
 
@@ -176,6 +182,7 @@ public class ForestTests
             Name = "T-shirts",
             Parent = cat1
         });
+
         #endregion
 
         var sut = new CategoryForest();

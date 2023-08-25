@@ -166,6 +166,7 @@ public class CosmosStorageTests
     public async Task Store_ShouldAdd5NodesThenRejectDeleteOfBranchNode()
     {
         #region TestData
+
         var forest = new CategoryForest();
         var rootCategory = new Category { Id = "root100", Name = "Root00 One", IsRoot = true };
         var cat1 = new Category() { Id = "cat100", Name = "Category00 One", Parent = rootCategory };
@@ -179,6 +180,7 @@ public class CosmosStorageTests
 
         forest.AddTree(list1);
         forest.AddTree(list2);
+
         #endregion
 
         var sut = new CosmosStorage(testClient, testConfigRoot);
