@@ -147,6 +147,7 @@ public class ForestTests
         Assert.That(reason, Is.EqualTo("Node successfully marked for deletion."));
     }
     
+    [Test]
     public void TryDeleteNodeFromTree_ShouldFailToDeleteBranchNode()
     {
         #region TestData
