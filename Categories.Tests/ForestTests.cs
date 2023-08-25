@@ -9,6 +9,7 @@ public class ForestTests
     [Description("The basic happy path test for two trees")]
     public void CreateForest_ShouldReturnForestWithTwoTrees_GivenValidInput()
     {
+        #region TestData    
         var list1 = new List<Category>();
         var root1 = new Category
         {
@@ -55,6 +56,8 @@ public class ForestTests
         };
         list2.Add(t1);
 
+        #endregion
+        
         var sut = new CategoryForest();
         sut.AddTree(list1);
         sut.AddTree(list2);
@@ -68,6 +71,7 @@ public class ForestTests
     [Description("The basic happy path test")]
     public void CreateTree_ShouldReturnForestWithOneTree_GivenValidInput()
     {
+        #region TestData
         // Note that this tree must have its nodes inserted in order, so that the parent exists before the children
         var newTree = new List<Category>();
 
@@ -93,6 +97,7 @@ public class ForestTests
             Name = "T-shirts",
             Parent = cat1
         });
+        #endregion
 
         var sut = new CategoryForest();
         sut.AddTree(newTree);
@@ -103,6 +108,7 @@ public class ForestTests
     [Test]
     public void TryDeleteNodeFromTree_ShouldDeleteLeafNode()
     {
+        #region TestData
         // Note that this tree must have its nodes inserted in order, so that the parent exists before the children
         var newTree = new List<Category>();
 
@@ -128,6 +134,7 @@ public class ForestTests
             Name = "T-shirts",
             Parent = cat1
         });
+        #endregion
 
         var sut = new CategoryForest();
         sut.AddTree(newTree);
@@ -142,6 +149,7 @@ public class ForestTests
     
     public void TryDeleteNodeFromTree_ShouldFailToDeleteBranchNode()
     {
+        #region TestData
         // Note that this tree must have its nodes inserted in order, so that the parent exists before the children
         var newTree = new List<Category>();
 
@@ -167,6 +175,7 @@ public class ForestTests
             Name = "T-shirts",
             Parent = cat1
         });
+        #endregion
 
         var sut = new CategoryForest();
         sut.AddTree(newTree);
