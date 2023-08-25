@@ -33,11 +33,14 @@ public class CategoryForest : ICategoryForest
     /// <summary>
     /// Returns a CategoryTree by key.
     /// </summary>
-    /// <param name="parentId"></param>
+    /// <param name="rootId"></param>
+    /// <param name="tree"></param>
     /// <returns></returns>
-    public CategoryTree GetTreeByKey(string parentId)
+    public bool TryGetTreeByKey(string rootId, out CategoryTree? tree)
     {
-        return _forest[parentId];
+        var tryResult = _forest.TryGetValue(rootId, out var foundTree);
+        tree = foundTree;
+        return tryResult;
     }
 
     /// <summary>
@@ -73,7 +76,7 @@ public class CategoryForest : ICategoryForest
     public int GetForestCount()
     {
         int count = 0;
-        
+
         foreach (var keyValuePair in _forest)
         {
             var tree = keyValuePair.Value.Get();
@@ -86,6 +89,40 @@ public class CategoryForest : ICategoryForest
     #endregion
 
     #region Commands
+
+    public bool TryDeleteNodeFromTree(string treeId, string nodeId, out string? resultReason)
+    {
+        var treeExistsInForest = _forest.TryGetValue(treeId, out CategoryTree? targetTree);
+        if (treeExistsInForest)
+        {
+            var nodeExists = targetTree.TryFindNodeById(nodeId, out CategoryFull? foundNode);
+            if (nodeExists)
+            {
+                // check if node has children
+                var foundChildren = targetTree.TryFindNodesWithParentId(nodeId, out var children);
+                if (!foundChildren)
+                {
+                    // OK to delete
+                    targetTree.MarkForDelete(nodeId);
+                    resultReason = "Node successfully marked for deletion.";
+                    return true;
+                }
+                else
+                {
+                    resultReason = $"Could not delete node. Node has children.";
+                    return false;
+                }
+            }
+            else
+            {
+                resultReason = $"Could not find node with ID: '{nodeId}'.";
+                return false;
+            }
+        }
+
+        resultReason = $"Could not find the tree referred to by treeId {treeId}";
+        return false;
+    }
 
     /// <summary>
     /// Adds an entire tree to the forest.

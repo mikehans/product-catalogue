@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Categories.Tests")]
 [assembly: InternalsVisibleTo("Categories.CosmosDb.Tests")]
@@ -8,7 +9,7 @@ namespace Categories;
 /*
  * What does this need to do?
  * - create a new tree with a root (ctor)
- * - add an item to the tree (given a parent) 
+ * - add an item to the tree (given a parent)
  * - get the whole tree
  * - get the root
  * - find children given a parent
@@ -62,32 +63,34 @@ public class CategoryTree
         return rootCategory;
     }
 
+    internal bool TryFindNodeById(string id, out CategoryFull? foundNode)
+    {
+        var isSuccessful =  _hierarchy.TryGetValue(id, out foundNode);
+        return isSuccessful;
+    }
+
     /// <summary>
     /// Finds nodes in the tree given a parent node ID.
     /// </summary>
     /// <param name="parentId"></param>
+    /// <param name="childNodes"></param>
     /// <returns>A list of IDs, enabling full retrieval by key</returns>
-    private List<string> FindNodesWithParentId(string parentId)
+    internal bool TryFindNodesWithParentId(string parentId, out List<string> childNodes)
     {
         var values = _hierarchy.Values.ToList();
-        var foundItems = values.FindAll(item => item.Parent.Id == parentId).Select(item => item.Id);
-        return foundItems.ToList();
+        var foundItems = values.FindAll(item => item?.Parent?.Id == parentId).Select(item => item.Id);
+        if (foundItems.Count() > 0)
+        {
+            childNodes = foundItems.ToList();
+            return true;
+        }
+        else
+        {
+            childNodes = new List<string>();
+            return false;
+        }
     }
-
-    internal bool ValidateInsertIfParentExists(string parentId)
-    {
-        return FindNodesWithParentId(parentId).Count == 0;
-    }
-
-    internal bool ValidateDeleteIfNoChildren(string itemId)
-    {
-        var items = _hierarchy.Values.ToList();
-
-        var foundItem = items.Find(item => item.Id == itemId);
-
-        return FindNodesWithParentId(itemId).Count == 0;
-    }
-
+    
     /// <summary>
     /// Inserts a node (non-root). The parent must already exist in the tree.
     /// </summary>
@@ -122,5 +125,11 @@ public class CategoryTree
         _hierarchy.Add(resultCategory.Id, resultCategory);
 
         return childCategory.Id;
+    }
+
+    internal void MarkForDelete(string nodeId)
+    {
+        var categoryToDelete = _hierarchy[nodeId];
+        categoryToDelete.IsDeleting = true;
     }
 }

@@ -10,7 +10,7 @@ public class Category : CategoryBasic
 {
     public bool? IsRoot { get; init; }
     public Category? Parent { get; set; }
-    internal bool? IsDeleting { get; set; }
+    public bool? IsDeleting { get; set; }
 }
 
 public class CategoryFull: Category

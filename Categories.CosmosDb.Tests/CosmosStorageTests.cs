@@ -33,7 +33,8 @@ public class CosmosStorageTests
         var cosmosClientOptions = new CosmosClientOptions()
         {
             SerializerOptions = new CosmosSerializationOptions()
-                { PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase, IgnoreNullValues = true }
+                { PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase, IgnoreNullValues = true },
+            AllowBulkExecution = true
         };
 
         var emulatorCnString = testConfigRoot.GetSection("ConnectionString");
@@ -52,13 +53,12 @@ public class CosmosStorageTests
     [TearDown]
     public async Task TearDown()
     {
-        // await container.DeleteContainerAsync();
+        await container.DeleteContainerAsync();
     }
     
     [Test]
     public async Task ReadAll_ShouldReturn2TreesWith3ItemsEach()
     {
-        // Act
         var forest = new CategoryForest();
         var rootCategory = new Category { Id = "root1", Name = "Root One", IsRoot = true };
         var cat1 = new Category() { Id = "cat1", Name = "Category One", Parent = rootCategory };
@@ -74,7 +74,7 @@ public class CosmosStorageTests
         forest.AddTree(list2);
 
         var sut = new CosmosStorage(testClient, testConfigRoot);
-        await sut.Store(forest); // I don't yet get anything useful back out of this.
+        await sut.Store(forest); // I don't yet get anything useful back out of this. (Should be a list of errors)
         
         // This part gets the items directly from the database. Superseded by forest.GetForestCount()
         // using FeedIterator<CategoryDTO> feed = container.GetItemQueryIterator<CategoryDTO>(
@@ -98,4 +98,113 @@ public class CosmosStorageTests
         Assert.That(forestItems, Does.ContainKey("Root One"));
         Assert.That(forestItems, Does.ContainKey("Root Two"));
     }
+
+    [Test]
+    public async Task Store_ShouldAdd5NodesThenDeleteLeafNode()
+    {
+        var forest = new CategoryForest();
+        var rootCategory = new Category { Id = "root100", Name = "Root00 One", IsRoot = true };
+        var cat1 = new Category() { Id = "cat100", Name = "Category00 One", Parent = rootCategory };
+        var cat2 = new Category() { Id = "cat200", Name = "Category00 Two", Parent = cat1 };
+        var list1 = new List<Category> { rootCategory, cat1, cat2 };
+
+        var rootCat2 = new Category() { Id = "root200", Name = "Root00 Two", IsRoot = true };
+        var cat21 = new Category() { Id = "cat2100", Name = "Category00 Two One", Parent = rootCat2 };
+        var cat22 = new Category() { Id = "cat2200", Name = "Category00 Two Two", Parent = cat21 };
+        var list2 = new List<Category> { rootCat2, cat21, cat22 };
+
+        forest.AddTree(list1);
+        forest.AddTree(list2);
+
+        var sut = new CosmosStorage(testClient, testConfigRoot);
+        await sut.Store(forest);
+        
+        // Verify Arrange
+        TestContext.WriteLine("Verify arrange step.");
+        var readForestInitial = await sut.ReadAll();
+        var forestItemsInitial = readForestInitial.Get();
+        var treeFoundInitial = forestItemsInitial.TryGetValue("Root00 Two", out var categoryTreeInitial);
+        
+        Assert.That(treeFoundInitial, Is.True, "Test Arrange step failed. Failed to get the tree.");
+        
+        var testCategoryInitial = categoryTreeInitial.Get();
+        var retrieveSuccessfulInitial = testCategoryInitial.TryGetValue("cat2200", out var foundItemInitial);
+
+        Assert.That(retrieveSuccessfulInitial, Is.True, "Test Arrange step failed. Failed to find the subject category after initial write.");
+        
+        // Act
+        TestContext.WriteLine("Acting...");
+
+        // TODO: There's a usage problem here - fair bit of process load on the person using it.
+        var tryDeleteResult = forest.TryDeleteNodeFromTree("Root00 Two", "cat2200", out string resultReason);
+        if (tryDeleteResult)
+        {
+            await sut.Store(forest);
+        }
+
+        var readForest = await sut.ReadAll();
+        var forestItems = readForest.Get();
+        var treeFound = forestItems.TryGetValue("Root00 Two", out var categoryTree);
+        Assert.That(treeFound, Is.True, "Act step failed. Failed to get the tree");
+        var category = categoryTree.Get();
+        var retrieveSuccessful = category.TryGetValue("cat2200", out var foundItem);
+        
+        // Assert that we deleted a leaf from the tree
+        Assert.That(retrieveSuccessful, Is.False, "Failed to delete the subject category.");
+    }
+    
+    [Test]
+        public async Task Store_ShouldAdd5NodesThenRejectDeleteOfBranchNode()
+    {
+        var forest = new CategoryForest();
+        var rootCategory = new Category { Id = "root100", Name = "Root00 One", IsRoot = true };
+        var cat1 = new Category() { Id = "cat100", Name = "Category00 One", Parent = rootCategory };
+        var cat2 = new Category() { Id = "cat200", Name = "Category00 Two", Parent = cat1 };
+        var list1 = new List<Category> { rootCategory, cat1, cat2 };
+
+        var rootCat2 = new Category() { Id = "root200", Name = "Root00 Two", IsRoot = true };
+        var cat21 = new Category() { Id = "cat2100", Name = "Category00 Two One", Parent = rootCat2 };
+        var cat22 = new Category() { Id = "cat2200", Name = "Category00 Two Two", Parent = cat21 };
+        var list2 = new List<Category> { rootCat2, cat21, cat22 };
+
+        forest.AddTree(list1);
+        forest.AddTree(list2);
+
+        var sut = new CosmosStorage(testClient, testConfigRoot);
+        await sut.Store(forest);
+        
+        // Verify Arrange
+        TestContext.WriteLine("Verify arrange step.");
+        var readForestInitial = await sut.ReadAll();
+        var forestItemsInitial = readForestInitial.Get();
+        var treeFoundInitial = forestItemsInitial.TryGetValue("Root00 Two", out var categoryTreeInitial);
+        
+        Assert.That(treeFoundInitial, Is.True, "Test Arrange step failed. Failed to get the tree.");
+        
+        var testCategoryInitial = categoryTreeInitial.Get();
+        var retrieveSuccessfulInitial = testCategoryInitial.TryGetValue("cat2100", out var foundItemInitial);
+
+        Assert.That(retrieveSuccessfulInitial, Is.True, "Test Arrange step failed. Failed to find the subject category after initial write.");
+        
+        // Act
+        TestContext.WriteLine("Acting...");
+
+        // TODO: There's a usage problem here - fair bit of process load on the person using it.
+        var tryDeleteResult = forest.TryDeleteNodeFromTree("Root00 Two", "cat2100", out string resultReason);
+        if (tryDeleteResult)
+        {
+            await sut.Store(forest);
+        }
+
+        var readForest = await sut.ReadAll();
+        var forestItems = readForest.Get();
+        var treeFound = forestItems.TryGetValue("Root00 Two", out var categoryTree);
+        Assert.That(treeFound, Is.True, "Act step failed. Failed to get the tree");
+        var category = categoryTree.Get();
+        var retrieveSuccessful = category.TryGetValue("cat2100", out var foundItem);
+        
+        // Assert that we deleted a leaf from the tree
+        Assert.That(retrieveSuccessful, Is.True, "Category is missing but should still exist.");
+    }
+
 }

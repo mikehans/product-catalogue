@@ -14,9 +14,13 @@ public class CosmosStorage : IStorage
         _configuration = configuration;
     }
 
-    public async Task<bool> Store(CategoryForest forest)
+    public async Task Store(CategoryForest forest)
     {
+        // TODO: Add a relevant return
+
         var container = GetContainer("categories");
+
+        List<Task> tasks = new List<Task>();
 
         var forestDict = forest.Get().Values;
         foreach (var categoryTree in forestDict)
@@ -25,43 +29,82 @@ public class CosmosStorage : IStorage
             var root = treeDict.Values.First(n => n.IsRoot is true);
             var partitionKey = root.Id;
 
-            foreach (var categoryFull in treeDict.Values)
+            tasks.AddRange(CreateCosmosChangeTasks(treeDict, container, partitionKey));
+        }
+
+        await Task.WhenAll(tasks);
+    }
+
+    private List<Task> CreateCosmosChangeTasks(Dictionary<string, CategoryFull> treeDict, Container container,
+        string partitionKey)
+    {
+        List<Task> tasks = new List<Task>();
+        foreach (var categoryFull in treeDict.Values)
+        {
+            if (categoryFull.IsDeleting is true)
             {
-                var categoryDto = new CategoryDTO()
-                {
-                    id = categoryFull.Id,
-                    Name = categoryFull.Name,
-                    RootId = partitionKey
-                };
+                tasks.Add(
+                    container
+                        .DeleteItemAsync<CategoryDTO>(categoryFull.Id, new PartitionKey(partitionKey))
+                        .ContinueWith(ContinuationAction)
+                );
+            }
+            else
+            {
+                var categoryDto = CreateCategoryDto(categoryFull, partitionKey);
 
-                if (categoryFull.IsRoot is true)
-                {
-                    categoryDto.IsRoot = true;
-                }
-                else
-                {
-                    categoryDto.Parent = new NestedCategoryDTO()
-                        { id = categoryFull?.Parent?.Id, Name = categoryFull?.Parent?.Name };
-                    categoryDto.Ancestors = BuildAncestorList(categoryFull);
-                }
-
-                try
-                {
-                    var itemResponse =
-                        await container.UpsertItemAsync(categoryDto, new PartitionKey(categoryDto.RootId));
-                    Console.WriteLine(itemResponse.StatusCode);
-                }
-                catch (CosmosException e)
-                {
-                    Console.WriteLine(e.ResponseBody);
-                }
+                tasks.Add(
+                    container
+                        .UpsertItemAsync(categoryDto, new PartitionKey(categoryDto.RootId))
+                        .ContinueWith(ContinuationAction)
+                );
             }
         }
 
-        // TODO: Add a relevant return
-        return true;
+        return tasks;
+    }
 
-        // TODO: not yet in scope: deletes.
+    private void ContinuationAction(Task<ItemResponse<CategoryDTO>> response)
+    {
+        if (!response.IsCompletedSuccessfully)
+        {
+            var innerExceptions = response.Exception.Flatten();
+
+            if (innerExceptions.InnerExceptions.FirstOrDefault(inner => inner is CosmosException) is
+                CosmosException
+                cosmosException)
+            {
+                Console.WriteLine($"{cosmosException.StatusCode}: {cosmosException.Message}");
+            }
+            else
+            {
+                Console.WriteLine(
+                    $"Exception:  {innerExceptions.InnerExceptions.FirstOrDefault()}");
+            }
+        }
+    }
+
+    private CategoryDTO CreateCategoryDto(CategoryFull categoryFull, string partitionKey)
+    {
+        var categoryDto = new CategoryDTO()
+        {
+            id = categoryFull.Id,
+            Name = categoryFull.Name,
+            RootId = partitionKey
+        };
+
+        if (categoryFull.IsRoot is true)
+        {
+            categoryDto.IsRoot = true;
+        }
+        else
+        {
+            categoryDto.Parent = new NestedCategoryDTO()
+                { id = categoryFull?.Parent?.Id, Name = categoryFull?.Parent?.Name };
+            categoryDto.Ancestors = BuildAncestorList(categoryFull);
+        }
+
+        return categoryDto;
     }
 
     public async Task<CategoryForest> ReadAll()

@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Categories.CosmosDb;
+﻿namespace Categories.CosmosDb;
 
 public class CategoryDTO
 {
